@@ -6,7 +6,7 @@
  ██║  ██║╚██████╔╝██║  ██╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 ```
-#### Add Vim bindings to local Roku devices?  Sure
+#### Add Vim bindings to local network Roku devices
 
 ----
 
