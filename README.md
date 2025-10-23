@@ -7,6 +7,7 @@
  ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝
 ```
 #### Add Vim bindings to local network Roku devices
+[![PyPI](https://img.shields.io/pypi/v/rokuvim.svg)](https://pypi.org/project/rokuvim/)
 
 ----
 
