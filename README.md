@@ -23,10 +23,27 @@ Decided to revive this and fix some of the rendering issues.  Uses curses for re
 
 ----
 
+## Installation
+
+### From PyPI
+`pip install rokuvim`
+
+### From source
+
+```bash
+git clone https://github.com/heheoppsy/RokuVim.git
+cd RokuVim
+pip install .
+```
+
+After installing, launch the remote with:  `rokuvim`
+
+----
+
 ## Notes
 Roku has disabled network remote support by default on newer devices.  You'll have to enable them.
 
 From the home screen go to Settings > System > Advanced System settings > Control by mobile apps > Network Access and change the setting to "Enabled". A warning will come up, select "Yes, allow".
 
-- `pycurl` needs libcurl headers present. On Debian/Ubuntu run `apt install libcurl4-openssl-dev`, on macOS `brew install curl`. Windows users should rely on the prebuilt wheels.
-- The curses UI requires a real TTY; some IDE terminals or non-interactive shells may fail.
+`pycurl` needs libcurl headers present. On Debian/Ubuntu run `apt install libcurl4-openssl-dev`, on macOS `brew install curl`. Windows users should rely on the prebuilt wheels.
+The curses UI requires a real TTY; some IDE terminals or non-interactive shells may fail.
