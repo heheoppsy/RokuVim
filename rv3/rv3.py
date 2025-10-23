@@ -8,6 +8,7 @@ from threading import Thread
 from queue import Queue
 import xml.etree.ElementTree as ET
 import html
+import locale
 import curses
 from pathlib import Path
 from importlib import import_module
@@ -37,6 +38,7 @@ error_segments = display.error_segments
 blank_line = display.blank_line
 
 
+locale.setlocale(locale.LC_ALL, "")
 SESSION = requests.Session()
 SESSION.headers.update({'User-Agent': 'RokuVim'})
 
@@ -85,9 +87,11 @@ class device:
             )
             resp.raise_for_status()
 
-            self.devinfo = resp.content
+            encoding = resp.encoding or resp.apparent_encoding or 'utf-8'
+            payload = resp.content.decode(encoding, errors='replace')
+            self.devinfo = payload
 
-            tree = ET.fromstring(self.devinfo.decode('iso-8859-1', errors='replace'))
+            tree = ET.fromstring(payload)
 
             name_node = tree.find("friendly-device-name")
             if name_node is not None and name_node.text:
@@ -118,9 +122,11 @@ class device:
             )
             resp.raise_for_status()
 
-            self.medinfo = resp.content
+            encoding = resp.encoding or resp.apparent_encoding or 'utf-8'
+            payload = resp.content.decode(encoding, errors='replace')
+            self.medinfo = payload
 
-            tree = ET.fromstring(self.medinfo.decode('iso-8859-1', errors='replace'))
+            tree = ET.fromstring(payload)
             state_raw = tree.attrib.get("state", "").lower()
             states = {
                 'none': 'Off / Idle',
