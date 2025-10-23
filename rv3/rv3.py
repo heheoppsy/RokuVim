@@ -1,18 +1,17 @@
 import sys
 import socket
-import pycurl
 import signal
 import time
 import re
 import threading
 from threading import Thread
 from queue import Queue
-from io import BytesIO
 import xml.etree.ElementTree as ET
 import html
 import curses
 from pathlib import Path
 from importlib import import_module
+import requests
 
 package_dir = Path(__file__).resolve().parent
 parent_dir = str(package_dir.parent)
@@ -36,6 +35,10 @@ remote_footer_segments = display.remote_footer_segments
 insert_frame_segments = display.insert_frame_segments
 error_segments = display.error_segments
 blank_line = display.blank_line
+
+
+SESSION = requests.Session()
+SESSION.headers.update({'User-Agent': 'RokuVim'})
 
 
 class device:
@@ -73,20 +76,18 @@ class device:
             time.sleep(2)
 
     def update_device(self):
-        buffer = BytesIO()
         self.devinfo = None
 
         try:
-            curl = pycurl.Curl()
-            curl.setopt(curl.USERAGENT, 'RokuVim')
-            curl.setopt(curl.URL, f'http://{self.ip}:8060/query/device-info')
-            curl.setopt(curl.WRITEDATA, buffer)
-            curl.perform()
-            curl.close()
+            resp = SESSION.get(
+                f'http://{self.ip}:8060/query/device-info',
+                timeout=3
+            )
+            resp.raise_for_status()
 
-            self.devinfo = buffer.getvalue()
+            self.devinfo = resp.content
 
-            tree = ET.fromstring(self.devinfo.decode('utf-8', errors='replace'))
+            tree = ET.fromstring(self.devinfo.decode('iso-8859-1', errors='replace'))
 
             name_node = tree.find("friendly-device-name")
             if name_node is not None and name_node.text:
@@ -108,20 +109,18 @@ class device:
             self.err_upd(device=True)
 
     def update_media(self):
-        buffer = BytesIO()
         self.medinfo = None
 
         try:
-            curl = pycurl.Curl()
-            curl.setopt(curl.USERAGENT, 'RokuVim')
-            curl.setopt(curl.URL, f'http://{self.ip}:8060/query/media-player')
-            curl.setopt(curl.WRITEDATA, buffer)
-            curl.perform()
-            curl.close()
+            resp = SESSION.get(
+                f'http://{self.ip}:8060/query/media-player',
+                timeout=3
+            )
+            resp.raise_for_status()
 
-            self.medinfo = buffer.getvalue()
+            self.medinfo = resp.content
 
-            tree = ET.fromstring(self.medinfo.decode('utf-8', errors='replace'))
+            tree = ET.fromstring(self.medinfo.decode('iso-8859-1', errors='replace'))
             state_raw = tree.attrib.get("state", "").lower()
             states = {
                 'none': 'Off / Idle',
@@ -190,10 +189,6 @@ class sets:
     select = None
     locker = threading.Lock()
     q = Queue()
-    kp = pycurl.Curl()
-    kp.setopt(kp.POST, 1)
-    kp.setopt(kp.USERAGENT, 'RokuVim')
-    kp.setopt(kp.POSTFIELDS, '')
     mode = 's'
 
 
@@ -422,8 +417,14 @@ def scan_range(stdscr):
 
 def c_keypress(key):
     dev = device.instances[sets.select]
-    sets.kp.setopt(sets.kp.URL, f'http://{dev.ip}:8060/keypress/{key}')
-    sets.kp.perform()
+    try:
+        resp = SESSION.post(
+            f'http://{dev.ip}:8060/keypress/{key}',
+            timeout=2
+        )
+        resp.raise_for_status()
+    except requests.RequestException:
+        pass
 
 
 def rv_init(stdscr):

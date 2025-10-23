@@ -45,5 +45,5 @@ Roku has disabled network remote support by default on newer devices.  You'll ha
 
 From the home screen go to Settings > System > Advanced System settings > Control by mobile apps > Network Access and change the setting to "Enabled". A warning will come up, select "Yes, allow".
 
-`pycurl` needs libcurl headers present. On Debian/Ubuntu run `apt install libcurl4-openssl-dev`, on macOS `brew install curl`. Windows users should rely on the prebuilt wheels.
+HTTP requests are handled with `requests`; no additional system libraries are required.
 The curses UI requires a real TTY; some IDE terminals or non-interactive shells may fail.
