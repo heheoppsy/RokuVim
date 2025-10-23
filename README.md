@@ -26,3 +26,8 @@ Decided to revive this and fix some of the rendering issues.  Uses curses for re
 NOTE:  Roku has disabled network remote support by default on newer devices.  You'll have to enable them.
 
 From the home screen go to Settings > System > Advanced System settings > Control by mobile apps > Network Access and change the setting to "Enabled". A warning will come up, select "Yes, allow".
+
+## Packaging
+
+- `pycurl` needs libcurl headers present. On Debian/Ubuntu run `apt install libcurl4-openssl-dev`, on macOS `brew install curl`. Windows users should rely on the prebuilt wheels.
+- The curses UI requires a real TTY; some IDE terminals or non-interactive shells may fail.
