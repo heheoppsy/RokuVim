@@ -10,13 +10,19 @@
 
 ----
 
-This is an older project that uses the Roku external control API
+This project uses the Roku external control API
 (https://developer.roku.com/docs/developer-program/debugging/external-control-api.md)
 
 It automatically scans the local network for Roku devices and lets you control them from your terminal, using common Vim bindings.
 
-Includes text input, media control and device/media information.
+Includes text input (insert mode), media control and device/media information.
 
 ----
 
-This project is pretty well discontinued, as I no longer use or have access to a Roku device for testing.
+Decided to revive this and fix some of the rendering issues.  Uses curses for rendering.
+
+----
+
+NOTE:  Roku has disabled network remote support by default on newer devices.  You'll have to enable them.
+
+From the home screen go to Settings > System > Advanced System settings > Control by mobile apps > Network Access and change the setting to "Enabled". A warning will come up, select "Yes, allow".
