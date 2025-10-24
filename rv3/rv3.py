@@ -186,7 +186,9 @@ class device:
         self.duration = None
         self.position = None
         self.last_media_update = 0
-        threading.Timer(5, self.update_device).start()
+        if device:
+            # ensure the next updater loop triggers a fresh device refresh
+            self.last_device_update = 0
 
 
 class sets:
